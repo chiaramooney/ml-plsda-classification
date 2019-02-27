@@ -16,8 +16,7 @@ import numpy as np
 #         strides=(height * _strides[0], width * _strides[1], *_strides),
 #         writeable=False
 #     )
-import array
-def get_subA(arr, nrows=40, ncols=40):
+def get_subdivisions(arr, nrows=40, ncols=40):
     """
     Return an array of shape (n, nrows, ncols) where
     n * nrows * ncols = arr.size
@@ -30,7 +29,7 @@ def get_subA(arr, nrows=40, ncols=40):
                .swapaxes(1,2)
                .reshape(-1, nrows, ncols))
 
-def get_data(tiles):
+def flatten_data(tiles):
     # flatten divided each sub-image into a 1D array
     result = []
     for x in tiles:
