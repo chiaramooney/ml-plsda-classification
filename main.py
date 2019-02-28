@@ -9,16 +9,21 @@ FOLDER_TO_READ = './Sample Data'
 START_TIME = time.strftime("%Y%m%d-%H%M%")
 OUTPUT_PATH = "./output/output-{}/".format(START_TIME)
 
+# Image processing parameters
+BLUR_KERNEL = 255 
+
 def main():
     # Create output environment
     create_output_environment(START_TIME)
 
+    # Read images and normalize
     raw_imgs, filenames = get_images_in_dir(FOLDER_TO_READ)
+    normalized_imgs = normalize_all_images(raw_imgs, BLUR_KERNEL)
 
     # Placeholder because I'm bored and want to print the shapes
-    for i in range(len(raw_imgs)):
-        print("Original shape: {}".format(raw_imgs[i].shape))
-        subdivisions_of_img = get_subdivisions(raw_imgs[i], 512, 512)
+    for i in range(len(normalized_imgs)):
+        print("Original shape: {}".format(normalized_imgs[i].shape))
+        subdivisions_of_img = get_subdivisions(normalized_imgs[i], 512, 512)
         print("Size of subdivisions of img array:"
               "{}".format(subdivisions_of_img.size))
 
@@ -33,6 +38,20 @@ def main():
         print('\n')
 
     print("Finished with whatever we were supposed to be doing.")
+
+def normalize_all_images(img_array, kernel_size):
+    normalized_array = []
+    for i in range(len(img_array)):
+        normalized_img = normalize_lighting(img_array[i], kernel_size)
+        normalized_array.append(normalized_img)
+    return normalized_array
+
+def normalize_lighting(img, kernel_size):
+    blur_kernel_size = (kernel_size, kernel_size)
+    sigma_x = 0     # stdev for blur operation
+    blur = cv.GaussianBlur(img, blur_kernel_size, sigma_x)
+    normalized_img = cv.subtract(img, blur)
+    return normalized_img 
 
 def get_subdivisions(arr, nrows=40, ncols=40):
     """
