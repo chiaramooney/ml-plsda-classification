@@ -10,7 +10,7 @@ START_TIME = time.strftime("%Y%m%d-%H%M%")
 OUTPUT_PATH = "./output/output-{}/".format(START_TIME)
 
 # Image processing parameters
-BLUR_KERNEL = 255 
+BLUR_KERNEL = 255
 
 def main():
     # Create output environment
@@ -41,7 +41,9 @@ def main():
 
 def normalize_all_images(img_array, kernel_size):
     normalized_array = []
-    for i in range(len(img_array)):
+    len_img_array = len(img_array)
+    for i in range(len_img_array):
+        print("Normalizing image {}/{}".format(i, len_img_array)) 
         normalized_img = normalize_lighting(img_array[i], kernel_size)
         normalized_array.append(normalized_img)
     return normalized_array
