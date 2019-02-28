@@ -100,6 +100,15 @@ def create_output_environment(start_time):
 	except OSError as e:
 		print("Something weird is happening. Find me...")
 
+# must run on img in its 2D state. returns array of all four rotations for a given image. 
+def create_img_rots(img):
+    res = []
+    res.append(img)
+    res.append(np.rot90(img))
+    res.append(np.rot90(res[1]))
+    res.append(np.rot90(res[2]))
+    res = np.array(res)
+    return res
 
 if __name__ == '__main__':
     main()

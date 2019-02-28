@@ -37,6 +37,18 @@ def flatten_data(tiles):
         result.append(x.flatten())
     result = np.array(result)
     return result
+
+def create_img_rots(img):
+    res = []
+    res.append(img)
+    res.append(np.rot90(img))
+    res.append(np.rot90(res[1]))
+    res.append(np.rot90(res[2]))
+    res = np.array(res)
+    return res
+
+arr = [[0,1],[2,3]]
+print(create_img_rots(arr))
 """
 [[1,2,3,4]
  [11,12,13,14]
