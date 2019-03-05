@@ -5,34 +5,47 @@ import time
 import errno
 
 # Globals
-FOLDER_TO_READ = './Sample Data'
+FOLDER_TO_READ = './pro'
 START_TIME = time.strftime("%Y%m%d-%H%M%")
 OUTPUT_PATH = "./output/output-{}/".format(START_TIME)
 
 def main():
     # Create output environment
-    create_output_environment(START_TIME)
-
+    #create_output_environment(START_TIME)
     raw_imgs, filenames = get_images_in_dir(FOLDER_TO_READ)
+    for x in raw_imgs:
+        
+        res = x.flatten()
+        #print(len(res))
+        for i in res:
+            print(i,",",end="", flush=True),
+        print ("1")
 
-    # Placeholder because I'm bored and want to print the shapes
-    for i in range(len(raw_imgs)):
-        print("Original shape: {}".format(raw_imgs[i].shape))
-        subdivisions_of_img = get_subdivisions(raw_imgs[i], 512, 512)
-        print("Size of subdivisions of img array:"
-              "{}".format(subdivisions_of_img.size))
 
-        # Save the subdivisions
-        for j in range(len(subdivisions_of_img)):
-            img_name = "{}_{}".format(j, filenames[i])
-            save_image(subdivisions_of_img[j], img_name, OUTPUT_PATH)
-
-        print("Flattening subdivisions...")
-        res = np.array(flatten_imgs(subdivisions_of_img))
-        print("Shape of result: {}".format(res.shape))
-        print('\n')
-
-    print("Finished with whatever we were supposed to be doing.")
+#def main():
+#    # Create output environment
+#    create_output_environment(START_TIME)
+#
+#    raw_imgs, filenames = get_images_in_dir(FOLDER_TO_READ)
+#
+#    # Placeholder because I'm bored and want to print the shapes
+#    for i in range(len(raw_imgs)):
+#        print("Original shape: {}".format(raw_imgs[i].shape))
+#        subdivisions_of_img = get_subdivisions(raw_imgs[i], 512, 512)
+#        print("Size of subdivisions of img array:"
+#              "{}".format(subdivisions_of_img.size))
+#
+#        # Save the subdivisions
+#        for j in range(len(subdivisions_of_img)):
+#            img_name = "{}_{}".format(j, filenames[i])
+#            save_image(subdivisions_of_img[j], img_name, OUTPUT_PATH)
+#
+#        print("Flattening subdivisions...")
+#        res = np.array(flatten_imgs(subdivisions_of_img))
+#        print("Shape of result: {}".format(res.shape))
+#        print('\n')
+#
+#    print("Finished with whatever we were supposed to be doing.")
 
 def get_subdivisions(arr, nrows=40, ncols=40):
     """
@@ -62,20 +75,22 @@ def get_images_in_dir(dir):
     as a list of opencv objects
     '''
     # Get all image files in the folder specified
-    print('Searching directory {} for images...'.format(dir))
+    #print('Searching directory {} for images...'.format(dir))
     img_files = []
     for subdir, dirs, files in os.walk(dir):
         for file_name in files:
             img_files.append(file_name)
-            print("Found file: {}".format(file_name))
+    #print("Found file: {}".format(file_name))
     
-    if (len(img_files) == 0):
-        print("No images found, or directory doesn't exist!")
+    #if (len(img_files) == 0):
+    #print("No images found, or directory doesn't exist!")
 
     # For each file, determine if it's an image. If so, open it as an opencv
     # object
     imgs = []
     for f in img_files:
+        if (len(f) < 4 or f[-4:] != ".tif"):
+            continue
         path_to_f = '{}/{}'.format(dir, f)
         imgs.append(cv.imread(path_to_f, 0)) # Read with openCV in grayscale
 
@@ -100,7 +115,7 @@ def create_output_environment(start_time):
 	except OSError as e:
 		print("Something weird is happening. Find me...")
 
-# must run on img in its 2D state. returns array of all four rotations for a given image. 
+# must run on img in its 2D state. returns array of all four rotations for a given image.
 def create_img_rots(img):
     res = []
     res.append(img)
