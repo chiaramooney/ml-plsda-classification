@@ -9,6 +9,9 @@ FOLDER_TO_READ = './pro'
 START_TIME = time.strftime("%Y%m%d-%H%M%")
 OUTPUT_PATH = "./output/output-{}/".format(START_TIME)
 
+# Image processing parameters
+BLUR_KERNEL = 255
+
 def main():
     # Create output environment
     #create_output_environment(START_TIME)
@@ -46,6 +49,23 @@ def main():
 #        print('\n')
 #
 #    print("Finished with whatever we were supposed to be doing.")
+
+
+def normalize_all_images(img_array, kernel_size):
+    normalized_array = []
+    len_img_array = len(img_array)
+    for i in range(len_img_array):
+        print("Normalizing image {}/{}".format(i, len_img_array)) 
+        normalized_img = normalize_lighting(img_array[i], kernel_size)
+        normalized_array.append(normalized_img)
+    return normalized_array
+
+def normalize_lighting(img, kernel_size):
+    blur_kernel_size = (kernel_size, kernel_size)
+    sigma_x = 0     # stdev for blur operation
+    blur = cv.GaussianBlur(img, blur_kernel_size, sigma_x)
+    normalized_img = cv.subtract(img, blur)
+    return normalized_img 
 
 def get_subdivisions(arr, nrows=40, ncols=40):
     """
