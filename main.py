@@ -5,7 +5,7 @@ import time
 import errno
 
 # Globals
-FOLDER_TO_READ = './pro'
+FOLDER_TO_READ = './output/new-pro'
 START_TIME = time.strftime("%Y%m%d-%H%M%")
 OUTPUT_PATH = "./output/output-{}/".format(START_TIME)
 
@@ -17,7 +17,7 @@ def main():
     #create_output_environment(START_TIME)
     raw_imgs, filenames = get_images_in_dir(FOLDER_TO_READ)
     for x in raw_imgs:
-        
+
         res = x.flatten()
         #print(len(res))
         for i in res:
@@ -34,7 +34,7 @@ def main():
 #    # Placeholder because I'm bored and want to print the shapes
 #    for i in range(len(raw_imgs)):
 #        print("Original shape: {}".format(raw_imgs[i].shape))
-#        subdivisions_of_img = get_subdivisions(raw_imgs[i], 512, 512)
+#        subdivisions_of_img = get_subdivisions(raw_imgs[i], 64, 64)
 #        print("Size of subdivisions of img array:"
 #              "{}".format(subdivisions_of_img.size))
 #
