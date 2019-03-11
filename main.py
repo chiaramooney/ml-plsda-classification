@@ -6,7 +6,8 @@ import errno
 
 # Globals
 # FOLDER_TO_READ = './output/new-pro'
-FOLDER_TO_READ = 'D:/Ryan/Dropbox/Sharing/project data/128_mes'
+# FOLDER_TO_READ = 'D:/Ryan/Dropbox/Sharing/project data/128_mes'
+FOLDER_TO_READ = '/Users/Ryan/Dropbox/Sharing/project data/128_pro'
 START_TIME = time.strftime("%Y%m%d-%H%M")
 OUTPUT_PATH = "./output/output-{}/".format(START_TIME)
 
@@ -27,7 +28,7 @@ def generate_csv_from_imgs():
         row = ""
         for pix_val in res:
             row += str(pix_val) + ","
-        row += "0"
+        row += "1"
         print(row)
 
 
