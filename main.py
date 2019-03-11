@@ -5,50 +5,56 @@ import time
 import errno
 
 # Globals
-FOLDER_TO_READ = './output/new-pro'
-START_TIME = time.strftime("%Y%m%d-%H%M%")
+# FOLDER_TO_READ = './output/new-pro'
+FOLDER_TO_READ = 'D:/Ryan/Dropbox/Sharing/project data/128_mes'
+START_TIME = time.strftime("%Y%m%d-%H%M")
 OUTPUT_PATH = "./output/output-{}/".format(START_TIME)
 
 # Image processing parameters
 BLUR_KERNEL = 255
 
 def main():
-    # Create output environment
-    #create_output_environment(START_TIME)
+    # Call function to run
+    # partition_imgs(128)
+    generate_csv_from_imgs()
+
+
+def generate_csv_from_imgs():
     raw_imgs, filenames = get_images_in_dir(FOLDER_TO_READ)
     for x in raw_imgs:
-
         res = x.flatten()
         #print(len(res))
-        for i in res:
-            print(i,",",end="", flush=True),
-        print ("1")
+        row = ""
+        for pix_val in res:
+            row += str(pix_val) + ","
+        row += "0"
+        print(row)
 
 
-#def main():
-#    # Create output environment
-#    create_output_environment(START_TIME)
-#
-#    raw_imgs, filenames = get_images_in_dir(FOLDER_TO_READ)
-#
-#    # Placeholder because I'm bored and want to print the shapes
-#    for i in range(len(raw_imgs)):
-#        print("Original shape: {}".format(raw_imgs[i].shape))
-#        subdivisions_of_img = get_subdivisions(raw_imgs[i], 64, 64)
-#        print("Size of subdivisions of img array:"
-#              "{}".format(subdivisions_of_img.size))
-#
-#        # Save the subdivisions
-#        for j in range(len(subdivisions_of_img)):
-#            img_name = "{}_{}".format(j, filenames[i])
-#            save_image(subdivisions_of_img[j], img_name, OUTPUT_PATH)
-#
-#        print("Flattening subdivisions...")
-#        res = np.array(flatten_imgs(subdivisions_of_img))
-#        print("Shape of result: {}".format(res.shape))
-#        print('\n')
-#
-#    print("Finished with whatever we were supposed to be doing.")
+def partition_imgs(dim_size):
+   # Create output environment
+   create_output_environment(START_TIME)
+   raw_imgs, filenames = get_images_in_dir(FOLDER_TO_READ)
+
+   # Placeholder because I'm bored and want to print the shapes
+   for i in range(len(raw_imgs)):
+       print("Original shape: {}".format(raw_imgs[i].shape))
+       subdivisions_of_img = get_subdivisions(raw_imgs[i], dim_size,
+                                              dim_size)
+       print("Size of subdivisions of img array:"
+             "{}".format(subdivisions_of_img.size))
+
+       # Save the subdivisions
+       for j in range(len(subdivisions_of_img)):
+           img_name = "{}_{}".format(j, filenames[i])
+           save_image(subdivisions_of_img[j], img_name, OUTPUT_PATH)
+
+    #    print("Flattening subdivisions...")
+    #    res = np.array(flatten_imgs(subdivisions_of_img))
+    #    print("Shape of result: {}".format(res.shape))
+    #    print('\n')
+
+   print("Finished with whatever we were supposed to be doing.")
 
 
 def normalize_all_images(img_array, kernel_size):
@@ -60,12 +66,14 @@ def normalize_all_images(img_array, kernel_size):
         normalized_array.append(normalized_img)
     return normalized_array
 
+
 def normalize_lighting(img, kernel_size):
     blur_kernel_size = (kernel_size, kernel_size)
     sigma_x = 0     # stdev for blur operation
     blur = cv.GaussianBlur(img, blur_kernel_size, sigma_x)
     normalized_img = cv.subtract(img, blur)
     return normalized_img 
+
 
 def get_subdivisions(arr, nrows=40, ncols=40):
     """
@@ -80,6 +88,7 @@ def get_subdivisions(arr, nrows=40, ncols=40):
                .swapaxes(1,2)
                .reshape(-1, nrows, ncols))
 
+
 def flatten_imgs(tiles):
     # flatten divided each sub-image into a 1D array
     result = []
@@ -88,6 +97,7 @@ def flatten_imgs(tiles):
         result.append(x.flatten())
     result = np.array(result)
     return result
+
 
 def get_images_in_dir(dir):
     '''
@@ -116,6 +126,7 @@ def get_images_in_dir(dir):
 
     return (imgs, img_files)
 
+
 def save_image(image_to_save, file_name, output_path):
 	print ("Writing {} to {}".format(file_name, output_path))
 	cv.imwrite((output_path + file_name), image_to_save)
@@ -135,6 +146,7 @@ def create_output_environment(start_time):
 	except OSError as e:
 		print("Something weird is happening. Find me...")
 
+
 # must run on img in its 2D state. returns array of all four rotations for a given image.
 def create_img_rots(img):
     res = []
@@ -144,6 +156,7 @@ def create_img_rots(img):
     res.append(np.rot90(res[2]))
     res = np.array(res)
     return res
+
 
 if __name__ == '__main__':
     main()
