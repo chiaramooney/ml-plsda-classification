@@ -7,7 +7,8 @@ import errno
 # Globals
 # FOLDER_TO_READ = './output/new-pro'
 # FOLDER_TO_READ = 'D:/Ryan/Dropbox/Sharing/project data/128_mes'
-FOLDER_TO_READ = '/Users/Ryan/Dropbox/Sharing/project data/128_pro'
+# FOLDER_TO_READ = '/Users/Ryan/Dropbox/Sharing/project data/128_pro'
+FOLDER_TO_READ = '/Users/Ryan/Desktop/128-pro'
 START_TIME = time.strftime("%Y%m%d-%H%M")
 OUTPUT_PATH = "./output/output-{}/".format(START_TIME)
 
@@ -36,6 +37,9 @@ def partition_imgs(dim_size):
    # Create output environment
    create_output_environment(START_TIME)
    raw_imgs, filenames = get_images_in_dir(FOLDER_TO_READ)
+
+   # Normalize
+   raw_imgs = normalize_all_images(raw_imgs, BLUR_KERNEL)
 
    # Placeholder because I'm bored and want to print the shapes
    for i in range(len(raw_imgs)):
